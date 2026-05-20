@@ -1,7 +1,7 @@
 from rede.camada import Camada
 from rede.rede_neural import RedeNeural
 
-from interpretadores import carregar_entrada_txt
+from interpretadores import carregar_entrada_txt, carregar_saidas_one_hot
 
 
 # ======================================
@@ -23,7 +23,7 @@ rede.adicionar_camada(
 rede.adicionar_camada(
     Camada(
         num_neuronios=26,
-        num_entradas=64
+        num_entradas=60
     )
 )
 
@@ -34,7 +34,11 @@ rede.adicionar_camada(
 
 dados = []
 saidas = []
+entrada_A=carregar_entrada_txt(CARACTERES COMPLETO/X.txt)
+dados.append(entrada_A)
 
+saida_A=carregar_saidas_one_hot(CARACTERES COMPLETO/Y_letra.txt)
+saidas.append(saida_A)
 # exemplo:
 # entrada_A = carregar_entrada_txt("CARACTERES COMPLETO/X.txt")
 # dados.append(entrada_A)
