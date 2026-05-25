@@ -12,12 +12,29 @@ class Sigmoide:
         s = Sigmoide.f(x)
         return s * (1 - s)
 
+def derivada_sigmoid(x):
+    s = sigmoid(x)
+    return s * (1 - s)
 
-class Tanh:
-    @staticmethod
-    def f(x):
-        return math.tanh(x)
+def relu(x):
+    return max(0, x)
 
-    @staticmethod
-    def df(x):
-        return 1 - math.tanh(x) ** 2
+
+def derivada_relu(x):
+    if x > 0:
+        return 1
+    return 0
+
+
+def tanh(x):
+    return math.tanh(x)
+
+
+def derivada_tanh(x):
+    t = tanh(x)
+    return 1 - t**2
+
+def step(x):
+    if x>0: return 1
+    if x==0: return 0
+    if x<0: return 0

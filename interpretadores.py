@@ -2,12 +2,35 @@ def carregar_entradas_txt(arquivo):
     dados_totais = []
 
     with open(arquivo, "r") as f:
-        for linha in f:
-            valores = linha.split(",")
+        conteudo = f.read()
 
-            entrada = [
-                0 if int(v.strip()) == -1 else 1 for v in valores if v.strip() != ""
-            ]
+    valores = conteudo.split(",")
+
+    entrada = []
+
+    for v in valores:
+
+        valor = int(v.strip())
+
+        # validação
+        if valor not in (-1, 1):
+
+            raise ValueError(
+                f"Valor inválido na entrada: {valor}"
+            )
+
+        # converte:
+        # -1 -> 0
+        #  1 -> 1
+        entrada.append(
+            0 if valor == -1 else 1
+        )
+
+    if len(entrada) != 120:
+
+        raise ValueError(
+            f"Esperado 120 valores, recebido {len(entrada)}"
+        )
 
             if len(entrada) == 120:
                 dados_totais.append(entrada)
@@ -16,17 +39,23 @@ def carregar_entradas_txt(arquivo):
 
     return dados_totais
 
-
 def letra_para_one_hot(letra):
 
     alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-    # inicia tudo com -1
-    vetor = [-1] * 26
+    letra = letra.upper()
 
-    indice = alfabeto.index(letra.upper())
+    if letra not in alfabeto:
 
-    # posição correta recebe 1
+        raise ValueError(
+            f"Letra inválida: {letra}"
+        )
+
+    # sigmoid trabalha melhor com 0/1
+    vetor = [0] * 26
+
+    indice = alfabeto.index(letra)
+
     vetor[indice] = 1
 
     return vetor
