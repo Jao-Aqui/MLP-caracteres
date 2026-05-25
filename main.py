@@ -7,7 +7,6 @@ from interpretadores import carregar_entrada_txt, carregar_saidas_one_hot
 # ======================================
 # CRIA REDE
 # ======================================
-
 rede = RedeNeural()
 
 tamanho_do_dado=input("Selecione as dimensões do dado \n 1: 12x10 (para identificação de caractéres) \n 2: 2x1 (para algebra booleana)")
@@ -59,10 +58,13 @@ match tamanho_do_dado:
 numero_de_epocas=input("Selecione o número de épocas ")
 
 
+rede.adicionar_camada(Camada(num_neuronios=26, num_entradas=60, ativacao=Tanh))
 
 # ======================================
-# EXEMPLO DE TREINAMENTO
+# CARREGAMENTO E DIVISÃO DOS DADOS
 # ======================================
+dados = carregar_entradas_txt("CARACTERES COMPLETO/X.txt")
+saidas = carregar_saidas_one_hot("CARACTERES COMPLETO/Y_letra.txt")
 
 dados = []
 saidas = []
@@ -79,12 +81,22 @@ saidas.append(saida_A)
 #saida_A=letra_para_one_hot()
 # saidas.append(saida_A)
 
+x_teste = dados[corte:]
+y_teste = saidas[corte:]
 
 # ======================================
 # TREINO
 # ======================================
+if len(x_treino) > 0:
+    print("Iniciando treinamento...")
+    rede.treinar(x_treino, y_treino, epochs=1000, taxa_aprendizado=0.01)
+    rede.salvar_pesos("modelos/pesos.json")
 
-if len(dados) > 0:
+# ======================================
+# TESTE COMPLETO
+# ======================================
+print("\nIniciando Teste...")
+rede.carregar_pesos("modelos/pesos.json")
 
     rede.treinar(
         dados,
@@ -93,21 +105,17 @@ if len(dados) > 0:
         taxa_aprendizado=0.1
     )
 
-    rede.salvar_pesos(
-        "modelos/pesos.json"
-    )
+# loop passando por todas as imagens de teste
+for i in range(total_teste):
+    entrada = x_teste[i]
+    esperado_one_hot = y_teste[i]
 
+    indice_esperado = esperado_one_hot.index(1)
 
-# ======================================
-# TESTE 
-# ======================================
+    resultado_previsto = rede.prever(entrada)
 
-# rede.carregar_pesos(
-#     "modelos/pesos.json"
-# )
-#
-# entrada = carregar_entrada_txt(datasets.CARACTERES COMPLETO)
-#
-# resultado = rede.prever(entrada)
-#
-# print("Classe prevista:", resultado)
+    if resultado_previsto == indice_esperado:
+        acertos += 1
+
+acuracia = (acertos / total_teste) * 100
+print(f"Acurácia no conjunto de teste: {acuracia:.2f}%")

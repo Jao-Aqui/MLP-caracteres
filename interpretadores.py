@@ -1,4 +1,5 @@
-def carregar_entrada_txt(arquivo):
+def carregar_entradas_txt(arquivo):
+    dados_totais = []
 
     with open(arquivo, "r") as f:
         conteudo = f.read()
@@ -31,8 +32,12 @@ def carregar_entrada_txt(arquivo):
             f"Esperado 120 valores, recebido {len(entrada)}"
         )
 
-    return entrada
+            if len(entrada) == 120:
+                dados_totais.append(entrada)
+            elif len(entrada) > 0:
+                print(f"Aviso: Linha ignorada. Esperado 120, recebido {len(entrada)}")
 
+    return dados_totais
 
 def letra_para_one_hot(letra):
 
@@ -69,8 +74,6 @@ def carregar_saidas_one_hot(arquivo):
             # ignora linhas vazias
             if letra != "":
 
-                saidas.append(
-                    letra_para_one_hot(letra)
-                )
+                saidas.append(letra_para_one_hot(letra))
 
     return saidas
